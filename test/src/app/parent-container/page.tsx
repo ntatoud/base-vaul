@@ -1,7 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { Drawer } from 'vaul';
+import { Drawer } from 'base-vaul';
 
 export default function Page() {
   return (

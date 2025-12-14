@@ -2,7 +2,7 @@
 
 import { clsx } from 'clsx';
 import { useState } from 'react';
-import { Drawer } from 'vaul';
+import { Drawer } from 'base-vaul';
 
 const snapPoints = ['148px', '355px'];
 
@@ -15,9 +15,7 @@ export default function Page() {
     <div className="w-screen h-screen bg-white p-8 flex justify-center items-center">
       <div data-testid="active-snap-index">{activeSnapPointIndex}</div>
       <Drawer.Root open snapPoints={snapPoints} activeSnapPoint={snap} setActiveSnapPoint={setSnap}>
-        <Drawer.Trigger asChild>
-          <button data-testid="trigger">Open Drawer</button>
-        </Drawer.Trigger>
+        <Drawer.Trigger render={<button data-testid="trigger">Open Drawer</button>} />
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Portal>
           <Drawer.Content

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Drawer } from 'vaul';
+import { Drawer } from 'base-vaul';
 
 export default function Page() {
   const [open, setOpen] = useState(false);
@@ -10,11 +10,14 @@ export default function Page() {
   return (
     <div className="w-screen h-screen bg-white p-8 flex justify-center items-center" data-vaul-drawer-wrapper="">
       <Drawer.Root open={open}>
-        <Drawer.Trigger asChild onClick={() => setOpen(true)}>
-          <button data-testid="trigger" className="text-2xl">
-            Open Drawer
-          </button>
-        </Drawer.Trigger>
+        <Drawer.Trigger
+          onClick={() => setOpen(true)}
+          render={
+            <button data-testid="trigger" className="text-2xl">
+              Open Drawer
+            </button>
+          }
+        />
         <Drawer.Portal>
           <Drawer.Overlay data-testid="overlay" className="fixed inset-0 bg-black/40" />
           <Drawer.Content
@@ -56,7 +59,7 @@ export default function Page() {
               <div className="flex gap-6 justify-end max-w-md mx-auto">
                 <a
                   className="text-xs text-zinc-600 flex items-center gap-0.25"
-                  href="https://github.com/emilkowalski/vaul"
+                  href="https://github.com/ntatoud/base-vaul"
                   target="_blank"
                 >
                   GitHub
@@ -106,11 +109,13 @@ export default function Page() {
         </Drawer.Portal>
       </Drawer.Root>
       <Drawer.Root open={fullyControlled} onOpenChange={(o) => setFullyControlled(o)}>
-        <Drawer.Trigger asChild>
-          <button data-testid="fully-controlled-trigger" className="text-2xl">
-            Open Drawer
-          </button>
-        </Drawer.Trigger>
+        <Drawer.Trigger
+          render={
+            <button data-testid="fully-controlled-trigger" className="text-2xl">
+              Open Drawer
+            </button>
+          }
+        ></Drawer.Trigger>
         <Drawer.Portal>
           <Drawer.Overlay data-testid="overlay" className="fixed inset-0 bg-black/40" />
           <Drawer.Content
@@ -152,7 +157,7 @@ export default function Page() {
               <div className="flex gap-6 justify-end max-w-md mx-auto">
                 <a
                   className="text-xs text-zinc-600 flex items-center gap-0.25"
-                  href="https://github.com/emilkowalski/vaul"
+                  href="https://github.com/ntatoud/base-vaul"
                   target="_blank"
                 >
                   GitHub

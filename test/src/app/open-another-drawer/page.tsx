@@ -1,6 +1,6 @@
 'use client';
 
-import { Drawer } from 'vaul';
+import { Drawer } from 'base-vaul';
 import { useState } from 'react';
 
 export function MyDrawer({
@@ -14,9 +14,7 @@ export function MyDrawer({
 }) {
   return (
     <Drawer.Root open={open}>
-      <Drawer.Trigger asChild onClick={() => setOpen(true)}>
-        <button>Open Drawer</button>
-      </Drawer.Trigger>
+      <Drawer.Trigger onClick={() => setOpen(true)} render={<button>Open Drawer</button>} />
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content className="bg-zinc-100 flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">

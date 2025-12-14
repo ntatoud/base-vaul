@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { Drawer, DialogProps } from 'vaul';
+import { Drawer, DialogProps } from 'base-vaul';
 
 function DirectionalDrawer({
   direction,
@@ -12,11 +12,13 @@ function DirectionalDrawer({
 }) {
   return (
     <Drawer.Root direction={direction}>
-      <Drawer.Trigger asChild>
-        <button data-testid="trigger" className="text-2xl">
-          {children}
-        </button>
-      </Drawer.Trigger>
+      <Drawer.Trigger
+        render={
+          <button data-testid="trigger" className="text-2xl">
+            {children}
+          </button>
+        }
+      />
       <Drawer.Portal>
         <Drawer.Overlay data-testid="overlay" className="fixed inset-0 bg-black/40" />
         <Drawer.Content

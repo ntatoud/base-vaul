@@ -1,15 +1,25 @@
 import React from 'react';
 import { DrawerDirection } from './types';
 
+export type BaseUIMouseEvent = React.MouseEvent<HTMLDivElement> & {
+  preventBaseUIHandler: () => void;
+  readonly baseUIHandlerPrevented?: boolean | undefined;
+};
+
+export type BaseUIPointerEvent = React.PointerEvent<HTMLDivElement> & {
+  preventBaseUIHandler: () => void;
+  readonly baseUIHandlerPrevented?: boolean | undefined;
+};
+
 interface DrawerContextValue {
   drawerRef: React.RefObject<HTMLDivElement>;
   overlayRef: React.RefObject<HTMLDivElement>;
-  onPress: (event: React.PointerEvent<HTMLDivElement>) => void;
-  onRelease: (event: React.PointerEvent<HTMLDivElement> | null) => void;
-  onDrag: (event: React.PointerEvent<HTMLDivElement>) => void;
-  onNestedDrag: (event: React.PointerEvent<HTMLDivElement>, percentageDragged: number) => void;
+  onPress: (event: BaseUIPointerEvent) => void;
+  onRelease: (event: BaseUIMouseEvent | null) => void;
+  onDrag: (event: BaseUIMouseEvent) => void;
+  onNestedDrag: (event: BaseUIMouseEvent, percentageDragged: number) => void;
   onNestedOpenChange: (o: boolean) => void;
-  onNestedRelease: (event: React.PointerEvent<HTMLDivElement>, open: boolean) => void;
+  onNestedRelease: (event: BaseUIMouseEvent, open: boolean) => void;
   dismissible: boolean;
   isOpen: boolean;
   isDragging: boolean;

@@ -1,8 +1,8 @@
 'use client';
 
-import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { Dialog as DialogPrimitive } from '@base-ui/react';
 import React from 'react';
-import { DrawerContext, useDrawerContext } from './context';
+import { BaseUIMouseEvent, BaseUIPointerEvent, DrawerContext, useDrawerContext } from './context';
 import './style.css';
 import { usePreventScroll, isInput } from './use-prevent-scroll';
 import { useComposedRefs } from './use-composed-refs';
@@ -89,8 +89,8 @@ export type DialogProps = {
    * @default true
    */
   dismissible?: boolean;
-  onDrag?: (event: React.PointerEvent<HTMLDivElement>, percentageDragged: number) => void;
-  onRelease?: (event: React.PointerEvent<HTMLDivElement>, open: boolean) => void;
+  onDrag?: (event: BaseUIMouseEvent, percentageDragged: number) => void;
+  onRelease?: (event: BaseUIMouseEvent, open: boolean) => void;
   /**
    * When `false` it allows to interact with elements outside of the drawer without closing it.
    * @default true
@@ -259,7 +259,7 @@ export function Root({
     return (window.innerWidth - WINDOW_TOP_OFFSET) / window.innerWidth;
   }
 
-  function onPress(event: React.PointerEvent<HTMLDivElement>) {
+  function onPress(event: BaseUIPointerEvent) {
     if (!dismissible && !snapPoints) return;
     if (drawerRef.current && !drawerRef.current.contains(event.target as Node)) return;
 
@@ -354,7 +354,7 @@ export function Root({
     return true;
   }
 
-  function onDrag(event: React.PointerEvent<HTMLDivElement>) {
+  function onDrag(event: BaseUIMouseEvent) {
     if (!drawerRef.current) {
       return;
     }
@@ -597,7 +597,7 @@ export function Root({
     dragEndTime.current = new Date();
   }
 
-  function onRelease(event: React.PointerEvent<HTMLDivElement> | null) {
+  function onRelease(event: BaseUIMouseEvent | null) {
     if (!isDragging || !drawerRef.current) return;
 
     drawerRef.current.classList.remove(DRAG_CLASS);
@@ -706,7 +706,7 @@ export function Root({
     }
   }
 
-  function onNestedDrag(_event: React.PointerEvent<HTMLDivElement>, percentageDragged: number) {
+  function onNestedDrag(_event: BaseUIMouseEvent, percentageDragged: number) {
     if (percentageDragged < 0) return;
 
     const initialScale = (window.innerWidth - NESTED_DISPLACEMENT) / window.innerWidth;
@@ -721,7 +721,7 @@ export function Root({
     });
   }
 
-  function onNestedRelease(_event: React.PointerEvent<HTMLDivElement>, o: boolean) {
+  function onNestedRelease(_event: BaseUIMouseEvent, o: boolean) {
     const dim = isVertical(direction) ? window.innerHeight : window.innerWidth;
     const scale = o ? (dim - NESTED_DISPLACEMENT) / dim : 1;
     const translate = o ? -NESTED_DISPLACEMENT : 0;
@@ -800,40 +800,38 @@ export function Root({
   );
 }
 
-export const Overlay = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>>(
-  function ({ ...rest }, ref) {
-    const { overlayRef, snapPoints, onRelease, shouldFade, isOpen, modal, shouldAnimate } = useDrawerContext();
-    const composedRef = useComposedRefs(ref, overlayRef);
-    const hasSnapPoints = snapPoints && snapPoints.length > 0;
-    const onMouseUp = React.useCallback((event: React.PointerEvent<HTMLDivElement>) => onRelease(event), [onRelease]);
+export const Overlay = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Backdrop>
+>(function ({ ...rest }, ref) {
+  const { overlayRef, snapPoints, onRelease, shouldFade, isOpen, modal, shouldAnimate } = useDrawerContext();
+  const composedRef = useComposedRefs(ref, overlayRef);
+  const hasSnapPoints = snapPoints && snapPoints.length > 0;
+  const onMouseUp = React.useCallback((event: BaseUIMouseEvent) => onRelease(event), [onRelease]);
 
-    // Overlay is the component that is locking scroll, removing it will unlock the scroll without having to dig into Radix's Dialog library
-    if (!modal) {
-      return null;
-    }
+  // Overlay is the component that is locking scroll, removing it will unlock the scroll without having to dig into Radix's Dialog library
+  if (!modal) {
+    return null;
+  }
 
-    return (
-      <DialogPrimitive.Overlay
-        onMouseUp={onMouseUp}
-        ref={composedRef}
-        data-vaul-overlay=""
-        data-vaul-snap-points={isOpen && hasSnapPoints ? 'true' : 'false'}
-        data-vaul-snap-points-overlay={isOpen && shouldFade ? 'true' : 'false'}
-        data-vaul-animate={shouldAnimate?.current ? 'true' : 'false'}
-        {...rest}
-      />
-    );
-  },
-);
+  return (
+    <DialogPrimitive.Backdrop
+      onMouseUp={onMouseUp}
+      ref={composedRef}
+      data-vaul-overlay=""
+      data-vaul-snap-points={isOpen && hasSnapPoints ? 'true' : 'false'}
+      data-vaul-snap-points-overlay={isOpen && shouldFade ? 'true' : 'false'}
+      data-vaul-animate={shouldAnimate?.current ? 'true' : 'false'}
+      {...rest}
+    />
+  );
+});
 
 Overlay.displayName = 'Drawer.Overlay';
 
-export type ContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>;
+export type ContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Popup>;
 
-export const Content = React.forwardRef<HTMLDivElement, ContentProps>(function (
-  { onPointerDownOutside, style, onOpenAutoFocus, ...rest },
-  ref,
-) {
+export const Content = React.forwardRef<HTMLDivElement, ContentProps>(function ({ style, ...rest }, ref) {
   const {
     drawerRef,
     onPress,
@@ -855,7 +853,7 @@ export const Content = React.forwardRef<HTMLDivElement, ContentProps>(function (
   const [delayedSnapPoints, setDelayedSnapPoints] = React.useState(false);
   const composedRef = useComposedRefs(ref, drawerRef);
   const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
-  const lastKnownPointerEventRef = React.useRef<React.PointerEvent<HTMLDivElement> | null>(null);
+  const lastKnownPointerEventRef = React.useRef<BaseUIMouseEvent | null>(null);
   const wasBeyondThePointRef = React.useRef(false);
   const hasSnapPoints = snapPoints && snapPoints.length > 0;
   useScaleBackground();
@@ -892,95 +890,73 @@ export const Content = React.forwardRef<HTMLDivElement, ContentProps>(function (
     }
   }, []);
 
-  function handleOnPointerUp(event: React.PointerEvent<HTMLDivElement> | null) {
+  function handleOnPointerUp(event: BaseUIMouseEvent | null) {
     pointerStartRef.current = null;
     wasBeyondThePointRef.current = false;
     onRelease(event);
   }
 
   return (
-    <DialogPrimitive.Content
-      data-vaul-drawer-direction={direction}
-      data-vaul-drawer=""
-      data-vaul-delayed-snap-points={delayedSnapPoints ? 'true' : 'false'}
-      data-vaul-snap-points={isOpen && hasSnapPoints ? 'true' : 'false'}
-      data-vaul-custom-container={container ? 'true' : 'false'}
-      data-vaul-animate={shouldAnimate?.current ? 'true' : 'false'}
-      {...rest}
-      ref={composedRef}
-      style={
-        snapPointsOffset && snapPointsOffset.length > 0
-          ? ({
-              '--snap-point-height': `${snapPointsOffset[activeSnapPointIndex ?? 0]!}px`,
-              ...style,
-            } as React.CSSProperties)
-          : style
-      }
-      onPointerDown={(event) => {
-        if (handleOnly) return;
-        rest.onPointerDown?.(event);
-        pointerStartRef.current = { x: event.pageX, y: event.pageY };
-        onPress(event);
-      }}
-      onOpenAutoFocus={(e) => {
-        onOpenAutoFocus?.(e);
-
-        if (!autoFocus) {
-          e.preventDefault();
+    <DialogPrimitive.Viewport>
+      <DialogPrimitive.Popup
+        data-vaul-drawer-direction={direction}
+        data-vaul-drawer=""
+        data-vaul-delayed-snap-points={delayedSnapPoints ? 'true' : 'false'}
+        data-vaul-snap-points={isOpen && hasSnapPoints ? 'true' : 'false'}
+        data-vaul-custom-container={container ? 'true' : 'false'}
+        data-vaul-animate={shouldAnimate?.current ? 'true' : 'false'}
+        {...rest}
+        ref={composedRef}
+        style={
+          snapPointsOffset && snapPointsOffset.length > 0
+            ? ({
+                // @ts-ignore This should not be an error
+                '--snap-point-height': `${snapPointsOffset[activeSnapPointIndex ?? 0]!}px`,
+                ...style,
+              } as React.CSSProperties)
+            : style
         }
-      }}
-      onPointerDownOutside={(e) => {
-        onPointerDownOutside?.(e);
+        onPointerDown={(event) => {
+          if (handleOnly) return;
+          rest.onPointerDown?.(event);
+          pointerStartRef.current = { x: event.pageX, y: event.pageY };
+          onPress(event);
+        }}
+        onPointerMove={(event) => {
+          lastKnownPointerEventRef.current = event;
+          if (handleOnly) return;
+          rest.onPointerMove?.(event);
+          if (!pointerStartRef.current) return;
+          const yPosition = event.pageY - pointerStartRef.current.y;
+          const xPosition = event.pageX - pointerStartRef.current.x;
 
-        if (!modal || e.defaultPrevented) {
-          e.preventDefault();
-          return;
-        }
+          const swipeStartThreshold = event.pointerType === 'touch' ? 10 : 2;
+          const delta = { x: xPosition, y: yPosition };
 
-        if (keyboardIsOpen.current) {
-          keyboardIsOpen.current = false;
-        }
-      }}
-      onFocusOutside={(e) => {
-        if (!modal) {
-          e.preventDefault();
-          return;
-        }
-      }}
-      onPointerMove={(event) => {
-        lastKnownPointerEventRef.current = event;
-        if (handleOnly) return;
-        rest.onPointerMove?.(event);
-        if (!pointerStartRef.current) return;
-        const yPosition = event.pageY - pointerStartRef.current.y;
-        const xPosition = event.pageX - pointerStartRef.current.x;
-
-        const swipeStartThreshold = event.pointerType === 'touch' ? 10 : 2;
-        const delta = { x: xPosition, y: yPosition };
-
-        const isAllowedToSwipe = isDeltaInDirection(delta, direction, swipeStartThreshold);
-        if (isAllowedToSwipe) onDrag(event);
-        else if (Math.abs(xPosition) > swipeStartThreshold || Math.abs(yPosition) > swipeStartThreshold) {
+          const isAllowedToSwipe = isDeltaInDirection(delta, direction, swipeStartThreshold);
+          if (isAllowedToSwipe) onDrag(event);
+          else if (Math.abs(xPosition) > swipeStartThreshold || Math.abs(yPosition) > swipeStartThreshold) {
+            pointerStartRef.current = null;
+          }
+        }}
+        onPointerUp={(event) => {
+          rest.onPointerUp?.(event);
           pointerStartRef.current = null;
-        }
-      }}
-      onPointerUp={(event) => {
-        rest.onPointerUp?.(event);
-        pointerStartRef.current = null;
-        wasBeyondThePointRef.current = false;
-        onRelease(event);
-      }}
-      onPointerOut={(event) => {
-        rest.onPointerOut?.(event);
-        handleOnPointerUp(lastKnownPointerEventRef.current);
-      }}
-      onContextMenu={(event) => {
-        rest.onContextMenu?.(event);
-        if (lastKnownPointerEventRef.current) {
+          wasBeyondThePointRef.current = false;
+          onRelease(event);
+        }}
+        onPointerOut={(event) => {
+          rest.onPointerOut?.(event);
           handleOnPointerUp(lastKnownPointerEventRef.current);
-        }
-      }}
-    />
+        }}
+        onContextMenu={(event) => {
+          rest.onContextMenu?.(event);
+          if (lastKnownPointerEventRef.current) {
+            handleOnPointerUp(lastKnownPointerEventRef.current);
+          }
+        }}
+      />
+    </DialogPrimitive.Viewport>
   );
 });
 
@@ -1072,11 +1048,19 @@ export const Handle = React.forwardRef<HTMLDivElement, HandleProps>(function (
       onClick={handleStartCycle}
       onPointerCancel={handleCancelInteraction}
       onPointerDown={(e) => {
-        if (handleOnly) onPress(e);
+        if (handleOnly)
+          onPress({
+            ...e,
+            preventBaseUIHandler: () => {},
+          });
         handleStartInteraction();
       }}
       onPointerMove={(e) => {
-        if (handleOnly) onDrag(e);
+        if (handleOnly)
+          onDrag({
+            ...e,
+            preventBaseUIHandler: () => {},
+          });
       }}
       // onPointerUp is already handled by the content component
       ref={ref}

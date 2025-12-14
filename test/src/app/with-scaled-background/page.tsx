@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import clsx from 'clsx';
-import { Drawer } from 'vaul';
-import { DrawerDirection } from 'vaul/src/types';
+import { Drawer } from 'base-vaul';
+import { DrawerDirection } from 'base-vaul/src/types';
 
 const CenteredContent = () => {
   return (
@@ -81,11 +81,13 @@ export default function Page() {
         <option value="right">Right</option>
       </select>
       <Drawer.Root shouldScaleBackground direction={direction}>
-        <Drawer.Trigger asChild>
-          <button data-testid="trigger" className="text-2xl">
-            Open Drawer
-          </button>
-        </Drawer.Trigger>
+        <Drawer.Trigger
+          render={
+            <button data-testid="trigger" className="text-2xl">
+              Open Drawer
+            </button>
+          }
+        />
         <Drawer.Portal>
           <Drawer.Overlay data-testid="overlay" className="fixed inset-0 bg-black/40" />
           <DrawerContent drawerDirection={direction} />

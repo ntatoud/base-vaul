@@ -1,14 +1,12 @@
 'use client';
 
-import { Drawer } from 'vaul';
+import { Drawer } from 'base-vaul';
 
 export default function Page() {
   return (
     <div className="w-screen h-screen bg-white p-8 flex justify-center items-center" data-vaul-drawer-wrapper="">
       <Drawer.Root>
-        <Drawer.Trigger asChild>
-          <button data-testid="trigger">Open Drawer</button>
-        </Drawer.Trigger>
+        <Drawer.Trigger render={<button data-testid="trigger">Open Drawer</button>} />
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40" />
           <Drawer.Content

@@ -1,5 +1,5 @@
 {
-  "name": "vaul",
+  "name": "base-vaul",
   "version": "1.1.2",
   "description": "Drawer component for React.",
   "main": "./dist/index.js",
@@ -26,7 +26,7 @@
     "dev": "bunchee --watch",
     "dev:test": "turbo run dev --filter=test...",
     "format": "prettier --write .",
-    "test": "playwright test"
+    "test": "playwright test --ui"
   },
   "keywords": [
     "react",
@@ -34,19 +34,18 @@
     "dialog",
     "modal"
   ],
-  "author": "Emil Kowalski <e@emilkowal.ski>",
+  "author": "Noé Tatoud <noe@bearstudio.fr>",
+  "contributors": {},
   "license": "MIT",
-  "homepage": "https://vaul.emilkowal.ski/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/emilkowalski/vaul.git"
+    "url": "https://github.com/ntatoud/base-vaul.git"
   },
   "bugs": {
-    "url": "https://github.com/emilkowalski/vaul/issues"
+    "url": "https://github.com/ntatoud/base-vaul/issues"
   },
   "devDependencies": {
     "@playwright/test": "^1.37.1",
-    "@radix-ui/react-dialog": "^1.0.4",
     "@types/node": "20.5.7",
     "@types/react": "18.2.55",
     "@types/react-dom": "18.2.18",
@@ -64,6 +63,6 @@
   },
   "packageManager": "pnpm@8.8.0",
   "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.1"
+    "@base-ui/react": "1.0.0"
   }
 }
