@@ -1,7 +1,10 @@
 {
   "name": "base-vaul",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Drawer component for React made with Base-UI.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
