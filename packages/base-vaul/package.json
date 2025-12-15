@@ -1,0 +1,71 @@
+{
+  "name": "base-vaul",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Drawer component for React made with Base-UI.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "style.css"
+  ],
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "require": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "pnpm run lint && bunchee && pnpm copy-assets",
+    "copy-assets": "cp -r ./src/style.css ./style.css",
+    "dev": "bunchee --watch",
+    "format": "prettier --write .",
+    "lint": "pnpm run --parallel --stream '/^lint:/'",
+    "lint:ts": "tsc --noEmit",
+    "lint:eslint": "eslint src/"
+  },
+  "keywords": [
+    "react",
+    "drawer",
+    "dialog",
+    "modal",
+    "base-ui"
+  ],
+  "author": "Noé Tatoud <noe@bearstudio.fr>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ntatoud/base-vaul.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ntatoud/base-vaul/issues"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
+    "@playwright/test": "1.57.0",
+    "@types/node": "20.5.7",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19",
+    "bunchee": "^5.1.5",
+    "eslint": "9.39.1",
+    "prettier": "^2.5.1",
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19",
+    "turbo": "2.6.3",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc",
+    "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc"
+  },
+  "packageManager": "pnpm@10.25.0",
+  "dependencies": {
+    "@base-ui/react": "1.0.0"
+  }
+}
