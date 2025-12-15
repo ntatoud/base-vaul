@@ -22,13 +22,13 @@ jobs:
           node-version: 22
 
       - name: Install deps
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build Package
         run: pnpm build
 
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        run: pnpm --filter e2e exec playwright install --with-deps
 
       - run: pnpm test:e2e
 
