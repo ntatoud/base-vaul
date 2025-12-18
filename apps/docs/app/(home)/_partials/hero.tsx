@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Drawer } from 'base-vaul';
 import Link from 'next/link';
 import { BookOpen, PlayCircle, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +24,7 @@ export function Hero() {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Button onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
+          <Button render={<Link href="#demo-install" />}>
             <PlayCircle />
             Try it out
           </Button>

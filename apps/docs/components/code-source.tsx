@@ -14,7 +14,7 @@ export async function CodeSource({ filePath }: { filePath: string }) {
 
   return (
     <CodeBlock className="max-h-[500px]">
-      <Pre dangerouslySetInnerHTML={{ __html: highlighted }} />
+      <Pre dangerouslySetInnerHTML={{ __html: highlighted }} className="scroll-mb-20 mb-20" />
     </CodeBlock>
   );
 }

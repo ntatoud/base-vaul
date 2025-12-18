@@ -3,7 +3,7 @@ import { Install } from '@/app/(home)/_partials/install';
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen scroll-smooth">
       <Hero />
       <Install />
       <footer className=" py-4 3xl:fixed:bg-transparent dark:bg-transparent">
