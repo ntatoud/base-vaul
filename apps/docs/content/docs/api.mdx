@@ -1,0 +1,75 @@
+---
+title: API Reference
+---
+
+## Anatomy
+```tsx
+import { Drawer } from 'vaul';
+
+export function MyDrawer() {
+  return (
+    <Drawer.Root>
+      <Drawer.Trigger />
+      <Drawer.Portal>
+        <Drawer.Overlay />
+        <Drawer.Content>
+          <Drawer.Handle />
+          <Drawer.Title />
+          <Drawer.Description />
+          <Drawer.Close />
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
+  );
+}
+```
+## Components API
+Description of props for each component.
+
+### Root
+
+Contains all the parts of a drawer.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogRootProps" />
+
+### Trigger
+
+The button that opens the drawer.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogTriggerProps" />
+
+### Portal
+
+When used, portals your overlay and content parts into the body.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogPortalProps" />
+
+
+### Overlay
+
+A layer that covers the inert portion of the view when the drawer is open.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogPortalProps" />
+
+### Content
+
+Contains content to be rendered in the open drawer.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogContentProps" />
+
+### Close
+
+The button that closes the drawer.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogCloseProps" />
+
+
+### Title
+
+An optional accessible title to be announced when the drawer is opened.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogTitleProps" />
+
+
+### Description
+
+An optional accessible description to be announced when the drawer is opened.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogDescriptionProps" />
+
+### Handle
+
+An optional handle to drag the drawer.
+<AutoTypeTable path="./lib/drawer-types.ts" name="DialogHandleProps" />
