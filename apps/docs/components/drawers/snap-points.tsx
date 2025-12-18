@@ -3,6 +3,7 @@
 import { clsx } from 'clsx';
 import { useState } from 'react';
 import { Drawer } from 'base-vaul';
+import { Button } from '@/components/ui/button';
 
 const snapPoints = ['148px', '355px', 1];
 
@@ -11,11 +12,9 @@ export function DrawerSnapPoints() {
 
   return (
     <Drawer.Root snapPoints={snapPoints} activeSnapPoint={snap} setActiveSnapPoint={setSnap}>
-      <Drawer.Trigger className="relative flex h-10 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full bg-white px-4 text-sm font-medium shadow-sm transition-all hover:bg-[#FAFAFA] dark:bg-[#161615] dark:hover:bg-[#1A1A19] dark:text-white">
-        Open Drawer
-      </Drawer.Trigger>
+      <Drawer.Trigger render={<Button />}>Open Drawer</Drawer.Trigger>
       <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-      <Drawer.Portal>
+      <Drawer.Portal className="z-50">
         <Drawer.Content
           data-testid="content"
           className="fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px]"
