@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "base-vaul",
+  "homepage": "https://base-vaul.netlify.com",
+  "items": [
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "dependencies": ["base-vaul", "@base-ui/react"],
+      "description": "Drawer component for React made with Base-UI.",
+      "files": [
+        {
+          "path": "registry/base/drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}
