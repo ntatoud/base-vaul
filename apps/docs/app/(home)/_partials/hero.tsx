@@ -24,7 +24,7 @@ export function Hero() {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Button render={<Link href="#demo-install" />}>
+          <Button nativeButton={false} render={<Link href="#demo-install" />}>
             <PlayCircle />
             Try it out
           </Button>

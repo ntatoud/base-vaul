@@ -25,8 +25,6 @@ export function Install() {
             </CopyButton>
           </div>
         </div>
-
-        {/* optional: keep right column empty on md if you want later actions */}
       </div>
 
       <div className="relative mt-6 w-full space-y-4">
