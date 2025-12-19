@@ -10,8 +10,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "style.css"
+    "dist"
   ],
   "exports": {
     "import": {
@@ -19,14 +18,13 @@
       "default": "./dist/index.mjs"
     },
     "require": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
     }
   },
   "scripts": {
-    "build": "pnpm run lint && bunchee && pnpm copy-assets",
-    "copy-assets": "cp -r ./src/style.css ./style.css",
-    "dev": "bunchee --watch",
+    "build": "pnpm run lint && tsdown",
+    "dev": "tsdown --watch",
     "format": "prettier --write .",
     "lint": "pnpm run --parallel --stream '/^lint:/'",
     "lint:ts": "tsc --noEmit",
@@ -49,19 +47,22 @@
     "url": "https://github.com/ntatoud/base-vaul/issues"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
+    "@arethetypeswrong/core": "^0.18.2",
+    "@bosh-code/tsdown-plugin-inject-css": "^2.0.0",
     "@playwright/test": "1.57.0",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "20.5.7",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "bunchee": "^5.1.5",
     "eslint": "9.39.1",
     "prettier": "^2.5.1",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
+    "tsdown": "^0.18.1",
     "turbo": "2.6.3",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "unplugin-lightningcss": "^0.4.3"
   },
   "peerDependencies": {
     "react": "^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc",
