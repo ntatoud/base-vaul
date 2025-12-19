@@ -9,7 +9,6 @@ import {
   DrawerContext,
   useDrawerContext,
 } from "./context";
-import "./style.css";
 import { usePreventScroll, isInput } from "./use-prevent-scroll";
 import { useComposedRefs } from "./use-composed-refs";
 import { useSnapPoints } from "./use-snap-points";
@@ -29,6 +28,8 @@ import { useControllableState } from "./use-controllable-state";
 import { useScaleBackground } from "./use-scale-background";
 import { usePositionFixed } from "./use-position-fixed";
 import { isIOS, isMobileFirefox } from "./browser";
+
+import "./index.css";
 
 export interface WithFadeFromProps {
   /**
