@@ -66,6 +66,6 @@
   },
   "packageManager": "pnpm@10.25.0",
   "dependencies": {
-    "@base-ui/react": "1.0.0"
+    "@base-ui/react": "1.1.0"
   }
 }
