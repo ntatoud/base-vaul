@@ -1,5 +1,12 @@
 # e2e
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies
+  - base-vaul@1.2.1
+
 ## 0.0.5
 
 ### Patch Changes
