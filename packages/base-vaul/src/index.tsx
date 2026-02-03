@@ -54,11 +54,9 @@ export interface WithoutFadeFromProps {
   fadeFromIndex?: never;
 }
 
-export type DialogProps = {
+export type DialogProps = DialogPrimitive.Root.Props & {
   activeSnapPoint?: number | string | null;
   setActiveSnapPoint?: (snapPoint: number | string | null) => void;
-  children?: React.ReactNode;
-  open?: boolean;
   /**
    * Number between 0 and 1 that determines when the drawer should be closed.
    * Example: threshold of 0.5 would close the drawer if the user swiped for 50% of the height of the drawer or more.
@@ -98,11 +96,6 @@ export type DialogProps = {
   dismissible?: boolean;
   onDrag?: (event: BaseUIMouseEvent, percentageDragged: number) => void;
   onRelease?: (event: BaseUIMouseEvent, open: boolean) => void;
-  /**
-   * When `false` it allows to interact with elements outside of the drawer without closing it.
-   * @default true
-   */
-  modal?: boolean;
   nested?: boolean;
   onClose?: () => void;
   /**
@@ -110,11 +103,6 @@ export type DialogProps = {
    * @default 'bottom'
    */
   direction?: "top" | "bottom" | "left" | "right";
-  /**
-   * Opened by default, skips initial enter animation. Still reacts to `open` state changes
-   * @default false
-   */
-  defaultOpen?: boolean;
   /**
    * When set to `true` prevents scrolling on the document body on mount, and restores it on unmount.
    * @default false
@@ -134,11 +122,6 @@ export type DialogProps = {
    */
   snapToSequentialPoint?: boolean;
   container?: HTMLElement | null;
-  /**
-   * Gets triggered after the open or close animation ends, it receives an `open` argument with the `open` state of the drawer by the time the function was triggered.
-   * Useful to revert any state changes for example.
-   */
-  onAnimationEnd?: (open: boolean) => void;
   preventScrollRestoration?: boolean;
   autoFocus?: boolean;
 } & (WithFadeFromProps | WithoutFadeFromProps);
@@ -146,6 +129,7 @@ export type DialogProps = {
 export function Root({
   open: openProp,
   onOpenChange,
+  onOpenChangeComplete,
   children,
   onDrag: onDragProp,
   onRelease: onReleaseProp,
@@ -170,25 +154,27 @@ export function Root({
   snapToSequentialPoint = false,
   preventScrollRestoration = false,
   repositionInputs = true,
-  onAnimationEnd,
   container,
   autoFocus = false,
 }: DialogProps) {
+  // Normalize modal prop - base-ui supports 'trap-focus' but drawer only uses boolean behavior
+  const isModal = modal === true || modal === "trap-focus";
+
   const [isOpen = false, setIsOpen] = useControllableState({
     defaultProp: defaultOpen,
     prop: openProp,
     onChange: (o: boolean) => {
-      onOpenChange?.(o);
+      onOpenChange?.(o, { reason: "none", preventUnmountOnClose: () => {} });
 
       if (!o && !nested) {
         restorePositionSetting();
       }
 
       setTimeout(() => {
-        onAnimationEnd?.(o);
+        onOpenChangeComplete?.(o);
       }, TRANSITIONS.DURATION * 1000);
 
-      if (o && !modal) {
+      if (o && !isModal) {
         if (typeof window !== "undefined") {
           window.requestAnimationFrame(() => {
             document.body.style.pointerEvents = "auto";
@@ -260,7 +246,7 @@ export function Root({
     isDisabled:
       !isOpen ||
       isDragging ||
-      !modal ||
+      !isModal ||
       justReleased ||
       !hasBeenOpened ||
       !repositionInputs ||
@@ -269,7 +255,7 @@ export function Root({
 
   const { restorePositionSetting } = usePositionFixed({
     isOpen,
-    modal,
+    modal: isModal,
     nested: nested ?? false,
     hasBeenOpened,
     preventScrollRestoration,
@@ -855,13 +841,13 @@ export function Root({
   }
 
   React.useEffect(() => {
-    if (!modal) {
+    if (!isModal) {
       // Need to do this manually unfortunately
       window.requestAnimationFrame(() => {
         document.body.style.pointerEvents = "auto";
       });
     }
-  }, [modal]);
+  }, [isModal]);
 
   return (
     <DialogPrimitive.Root
@@ -878,6 +864,7 @@ export function Root({
       }}
       open={isOpen}
       modal={modal}
+      onOpenChangeComplete={onOpenChangeComplete}
     >
       <DrawerContext.Provider
         value={{
@@ -901,7 +888,7 @@ export function Root({
           onNestedOpenChange,
           onNestedRelease,
           keyboardIsOpen,
-          modal,
+          modal: isModal,
           snapPointsOffset,
           activeSnapPointIndex,
           direction,
