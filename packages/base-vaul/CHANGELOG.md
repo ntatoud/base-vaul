@@ -1,5 +1,11 @@
 # base-vaul
 
+## 1.1.0
+
+### Minor Changes
+
+- Update @base-ui/react to 1.1.0
+
 ## 1.0.0
 
 ### Major Changes
